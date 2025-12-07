@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+CSV Frontend – File Upload & Results Dashboard:-
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This frontend allows users to upload CSV files, send them to the backend API, and view a detailed dashboard of:
 
-## Available Scripts
+Total rows
+Successfully inserted rows
+Failed rows with error messages
+Dynamic table for invalid records
+Built with React + Material UI and fully connected to your backend API.
 
-In the project directory, you can run:
+Tech Stack:-
 
-### `npm start`
+Frontend:-
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+ 1 )React (CRA)
+ 2) React Router DOM
+ 3) Material UI (MUI v5)
+ 4) Axios for API calls
+ 5) MUI DataGrid for tabular records
+ 6) Environment variables (.env)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Project Structure:-
 
-### `npm test`
+frontend-app/
+│── src/
+│   ├── App.jsx
+│   ├── components/
+│   │   ├── CsvUploadPage.jsx
+│   │   ├── ResultsDashboard.jsx
+│   │   └── FailedRecords.jsx
+│   ├── index.js
+│   └── styles/
+│
+│── .env
+│── package.json
+└── README.md
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Setup Instructions
+1️) Clone the repository
+git clone https://github.com/002-rajat/frontend-app.git
+cd frontend-app
 
-### `npm run build`
+2) Install dependencies
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3) Create a .env file
+REACT_APP_API_URL=http://localhost:4000
+This URL must point to your backend API.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4) Start the frontend
+ npm stat
+ App will run at:
+ http://localhost:3000
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+How It Works:-
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+CSV Upload Page (/):-
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ 1) User chooses a .csv file
+ 2) The file is uploaded using axios as multipart/form-data
+ 3) Backend returns:
+     a) total row
+     b) success count
+     c) failed count
+     d) detailed failed records with errors
+4) The app redirects to the Results Dashboard
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Results Dashboard (/results):-
+Shows:
+ a) Total records
+ b) Success count
+ c) Failed count
+ d) Paginated DataGrid of failed rows
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+ API Documentation (Frontend → Backend):-
+ 
+POST /api/upload
+Uploads a CSV file.
+URL
+POST {REACT_APP_API_URL}/api/upload
+Headers
+Content-Type: multipart/form-data
+Body (Form data)
+file: <csv-file>
 
-## Learn More
+Axios example
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const formData = new FormData();
+formData.append('file', file);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const resp = await axios.post(
+  `${process.env.REACT_APP_API_URL}/api/upload`,
+  formData,
+  { headers: { "Content-Type": "multipart/form-data" } }
+);
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Example Successful Backend Response:-
 
-### Analyzing the Bundle Size
+{
+  "totalRows": 5,
+  "successCount": 4,
+  "failedCount": 1,
+  "failedRecords": [
+    {
+      "rowNumber": 3,
+      "values": {
+        "name": "",
+        "email": "bademail",
+        "phone": "123"
+      },
+      "errors": [
+        "Name is required",
+        "Invalid email format",
+        "Phone must be exactly 10 digits"
+      ]
+    }
+  ]
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+UI Screens Included
+1️) Upload CSV Page
+   a) File picker
+   b) Upload button
+   c) Loading indicator
+   d) Error handling
+   e) Redirect to results on success
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2️) Results Dashboard
+   a) Summary cards
+   b) Failed records table
+   c) Dynamic DataGrid columns
+   d) Pagination
 
-### Advanced Configuration
+   Notes:-
+   1) Only .csv files are allowed
+   2) Large files supported (based on backend limit)
+   3) Auto navigation after successful upload
+   4) Table automatically adjusts to CSV column names
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+ 
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
