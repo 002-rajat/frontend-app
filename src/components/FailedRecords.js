@@ -1,4 +1,4 @@
-// FailedRecords.jsx
+
 import React, { useMemo } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -27,7 +27,7 @@ export function FailedRecords({ failedRecords }) {
 
       Object.keys(sample).forEach((key) => {
         cols.push({
-          field: key,               // must be simple field name
+          field: key,               
           headerName: key,
           width: 150,
           valueGetter: (params) => params.row.values?.[key] ?? "",

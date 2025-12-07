@@ -1,4 +1,4 @@
-// ResultsDashboard.jsx
+
 import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -21,7 +21,6 @@ export function ResultsDashboard({ uploadResult }) {
     );
   }
 
-  // Destructure uploadResult
   const { totalRows, successCount, failedCount, failedRecords } = uploadResult;
 
   return (
